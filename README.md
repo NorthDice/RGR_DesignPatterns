@@ -26,31 +26,11 @@ Object pool — твірний шаблон проєктування, набір
 
 ### Статична модель (діаграма класів або модулів) ObjectPool
 
-classDiagram
-    class ObjectPool {
-        - pool: List<Object>
-        - maxObjects: int
-        + acquireObject(): Object
-        + releaseObject(object: Object)
-    }
-    class Object {
-        + operation(): void
-    }
-    
-    ### Динамічна модель (діаграма взаємодії або стану) Object Pool
-    
-    sequenceDiagram
-    participant Client
-    participant ObjectPool
-    participant Object
+![Статична модель Object Pool](https://github.com/NorthDice/RGR_APPZ_Balychev/blob/main/ObjectPoolClassDiagram.jpg)
 
-    Client -> ObjectPool: acquireObject()
-    ObjectPool -> Object: get from pool
-    ObjectPool <-- Object: object
-    Client <-- ObjectPool: object
-
-    Client -> ObjectPool: releaseObject(object)
-    ObjectPool -> Object: return to pool
+### Динамічна модель (діаграма взаємодії або стану) Object Pool
+    
+![Динамічна модель Object Pool](https://github.com/NorthDice/RGR_APPZ_Balychev/blob/main/ObjtctPoolSequenseDiagram.jpg)
 
 
 
