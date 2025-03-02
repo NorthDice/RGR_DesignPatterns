@@ -1,104 +1,98 @@
-# Розрахунково графічна робота 
-Розрахунково графічна робота на тему «Шаблони проектування»
-В даній розрахунково графічній роботі буде розглянуто наступні шаблони проектування, а саме: Object pool, Bridge, Null Object, Reactor.
-## Object pool
-Object pool — твірний шаблон проєктування, набір ініціалізованих і готових до використання об'єктів. Коли системі потрібно об'єкт, він не створюється, а береться з пулу. Коли об'єкт більше не потрібен, він не знищується, а повертається в пул.
+# Calculation and Graphic Work
+Calculation and Graphic Work on the topic "Design Patterns"
+This calculation and graphic work explores the following design patterns: Object Pool, Bridge, Null Object, and Reactor.
+## Object Pool
+Object Pool is a creational design pattern that represents a set of initialized and ready-to-use objects. When the system needs an object, it is not created but taken from the pool. When the object is no longer needed, it is not destroyed but returned to the pool.
 
-### Призначення
+### Purpose
 
-Пул об'єктів призначений для зберігання готових до використання об'єктів. Коли система потребує новий об'єкт, він запрошується з пула, нехтуючи процесом породження. А після використання повертається назад в пул замість знищення.
+The object pool is designed to store ready-to-use objects. When the system requires a new object, it is taken from the pool, avoiding the overhead of creating it. After use, the object is returned to the pool instead of being destroyed.
 
-### Умови використання
+### Usage Conditions
 
-Шаблон використовується для підвищення продуктивності, якщо:
+The pattern is used to improve performance in cases where:
 
-•	об'єкти часто створюються і знищуються;
-•	система має обмежену кількість типів об'єктів, що зберігаються в Пулі.
-•	створення чи знищення об'єкта є дуже затратною операцією.
+•	Objects are frequently created and destroyed;
+•	The system has a limited number of object types stored in the pool;
+•	Creating or destroying an object is a resource-intensive operation.
 
-### Особливості використання
+### Features of Usage
 
-Пул нічого не знає про реалізацію об'єктів, які зберігаються. Тому вважається, що повернений об'єкт знаходиться в невизначеному стані. Для подальшого використання його необхідно перевести в початковий стан (скидання). Наявність об'єктів в невизначеному стані перетворює Пул в «об'єктну клоаку» (object cesspool). Повторне використання може стати причиною витоку конфіденційної інформації. Тому обов'язково необхідно зчищати поля з секретними даними при скиданні, а самі дані — знищувати. Можлива ситуація, коли в Пулі не залишиться вільних об'єктів. В такому випадку, реакція на запит може бути наступною:
+The pool knows nothing about the implementation of the objects it stores. Therefore, it is assumed that a returned object is in an undefined state. Before reuse, the object must be reset to its initial state. The presence of objects in an undefined state can turn the pool into an "object cesspool." Reusing objects may lead to data leaks, so it is essential to clear fields containing sensitive data during reset. If the pool runs out of available objects, the system can:
 
-•	збільшення розміру пула;
-•	відмова у видачі об'єкта;
-•	становлення в чергу і очікування звільнення об'єкта.
+•	Increase the pool size;
+•	Deny the request for an object;
+•	Queue the request and wait for an object to become available.
 
-### Статична модель (діаграма класів або модулів) ObjectPool
+### Static Model (Class or Module Diagram) of Object Pool
 
 ![Статична модель Object Pool](https://github.com/NorthDice/RGR_APPZ_Balychev/blob/main/ObjectPoolClassDiagram.jpg)
 
-### Динамічна модель (діаграма взаємодії або стану) Object Pool
+### Dynamic Model (Interaction or State Diagram) of Object Pool
     
 ![Динамічна модель Object Pool](https://github.com/NorthDice/RGR_APPZ_Balychev/blob/main/ObjtctPoolSequenseDiagram.jpg)
 
 ## Bridge
 
-Bridge —  шаблон проєктування, призначений для того, щоб відділити абстракцію від її конкретної імплементації таким чином, щоб вони могли бути змінені незалежно один від одного. Належить до класу структурних шаблонів.
+Bridge is a structural design pattern that separates abstraction from its implementation, allowing them to vary independently.
 
-### Призначення
+### Purpose
 
-Відокремити абстракцію від її реалізації таким чином, щоб перше та друге можна було змінювати незалежно одне від одного.
-Терміни абстракція та реалізацію не мають нічого спільного з абстрактним класом чи інтерфейсом мови програмування. Абстракція — це уявний рівень керування чим-небудь, що не виконує роботу самостійно, а делегує її рівню реалізації.
+The Bridge pattern decouples an abstraction from its implementation so that the two can evolve independently. The terms "abstraction" and "implementation" here do not refer to abstract classes or interfaces in programming languages. Abstraction refers to a high-level control layer that delegates work to the implementation layer.
 
-### Умови використання
+### Usage Conditions
 
-Слід використовувати шаблон Міст у випадках, коли:
+The Bridge pattern should be used when:
 
-•	треба запобігти постійній прив'язці абстракції до реалізації. Так, наприклад, буває коли реалізацію необхідно обрати під час виконання програми;
-•	як абстракції, так і реалізації повинні розширюватись новими підкласами. У цьому разі шаблон Міст дозволяє комбінувати різні абстракції та реалізації та змінювати їх незалежно одне від одного;
-•	зміни у реалізації не повинні впливати на клієнтів, тобто клієнтський код не повинен перекомпілюватись;
-•	треба повністю сховати від клієнтів реалізацію абстракції;
-•	треба розподілити одну реалізацію поміж кількох об'єктів (можливо застосовуючи підрахунок посилань), і при цьому приховати це від клієнта.
+•	There is a need to avoid a permanent binding between abstraction and implementation, especially when the implementation must be selected at runtime;
+•	Both abstractions and implementations should be extensible through subclassing;
+•	Changes in the implementation should not affect clients, meaning client code should not need recompilation;
+•	The implementation should be completely hidden from clients;
+•	A single implementation needs to be shared among multiple objects (e.g., using reference counting).
 
-### Статична модель (діаграма класів або модулів) Bridge
+### Static Model (Class or Module Diagram) of Bridge
 
 ![Статична модель Bridge](https://github.com/NorthDice/RGR_APPZ_Balychev/blob/main/BridgeClassDiagram.jpg)
 
-### Динамічна модель (діаграма взаємодії або стану) Bridge
+### Dynamic Model (Interaction or State Diagram) of Bridge
 
 ![Динамічна модель Bridge](https://github.com/NorthDice/RGR_APPZ_Balychev/blob/main/BridgeSequenceDiagram.jpg)
 
 ## Null object
 
-В об'єктно-орієнтованому програмуванні, Null Object або нульовий об'єкт — це об'єкт з визначеною нейтральною поведінкою. Шаблон проєктування Null Object описує використання цих об'єктів та їх поведінки або відсутності таких. 
+In object-oriented programming, a Null Object is an object with defined neutral behavior. The Null Object design pattern describes the use of such objects and their behavior (or lack thereof).
 
-### Призначення
+### Purpose
 
-Замість використання null-посилання для відображення відсутності об'єкту треба використовувати спеціальний об'єкт, який реалізує потрібні інтерфейси, але не має поведінки, тобто має пусті методи. Перевагою цього підходу є те, що реалізація нульового об'єкту завжди передбачувана: вона нічого не робить, а тому не має таких побічних ефектів, які має null-посилання.
+Instead of using a null reference to indicate the absence of an object, a special object implementing the required interfaces but having no behavior (empty methods) is used. The advantage of this approach is that the behavior of the null object is always predictable: it does nothing, avoiding the side effects of null references.
 
-Наприклад, функція повинна прочитати список файлів в директорії та виконати якісь дії з кожним. В випадку, якщо директорія порожня, можна повернути null або згенерувати виняток. Таким чином, код, що очікує список файлів повинен перевіряти, чи дійсно він отримав список, а це в свою чергу ускладнює структуру програми.
+For example, a function that reads a list of files in a directory and performs actions on each file can return a null object (e.g., an empty list) instead of null or throwing an exception. This eliminates the need for null checks in the calling code.
 
-Якщо повертати нульовий об'єкт (наприклад, порожній список), то зникає необхідність перевірок. Викликаючий код може ітерувати список файлів, не зважаючи на можливі помилки і не виконувати ніяких дій при цьому.
-Хоча, залишається можливим робити дещо змінену перевірку: «чи дорівнює результат нульовому об'єкту?», та діяти далі за логікою програми.
-Також, цей шаблон може використовуватися як заглушка при тестуванні.
-
-### Статична модель (діаграма класів або модулів) Null Object
+### Static Model (Class or Module Diagram) of Null Object
 
 ![Статична модель Null Object](https://github.com/NorthDice/RGR_APPZ_Balychev/blob/main/NullObjectClassDiagram.jpg)
 
-### Динамічна модель (діаграма взаємодії або стану) Null Object
+### Dynamic Model (Interaction or State Diagram) of Null Object
 
 ![Динамічна модель Null Object](https://github.com/NorthDice/RGR_APPZ_Balychev/blob/main/ObjtctPoolSequenseDiagram.jpg)
 
 ## Reactor
 
-Шаблон проектування програмного забезпечення реактор – стратегія обробки подій , яка може одночасно реагувати на безліч потенційних запитів на обслуговування. Ключовим компонентом шаблону є цикл подій , що працює в одному потоці або процесі , який демультиплексує вхідні запити та відправляє їх потрібного обробника запитів. 
-Покладаючись на механізми, засновані на подіях, а не на блокуючий введення-виведення або багатопоточність, реактор може обробляти безліч конкурентних запитів, що межують з введенням-виведенням, з мінімальною затримкою. Реактор також дозволяє легко змінювати або розширювати окремі процедури обробки запитів, хоча цей шаблон має деякі недоліки та обмеження. 
+The Reactor pattern is a software design pattern used for event handling that can simultaneously respond to multiple service requests. The key component of the pattern is an event loop running in a single thread or process, which demultiplexes incoming requests and dispatches them to the appropriate request handlers.
 
-### Призначення
+### Purpose
 
-Шаблон реактора може стати гарною відправною точкою для вирішення будь-якої паралельної проблеми обробки подій. Цей шаблон не обмежується мережевими сокетами; апаратне введення-виведення, доступ до файлової системи або бази даних , між-процесна взаємодія і навіть абстрактні системи передачі повідомлень - все це можливі варіанти використання.
+The Reactor pattern is a good starting point for solving any concurrent event-handling problem. It is not limited to network sockets; hardware I/O, file system or database access, inter-process communication, and even abstract messaging systems are all potential use cases.
 
-Однак шаблон реактора має обмеження, головним з яких є використання зворотних викликів, які ускладнюють аналіз та налагодження програми — проблема, характерна для проектів з інвертованим управлінням . Простіші підходи: «потік на з'єднання» і повністю ітеративний підхід, дозволяють уникнути цього і можуть бути прийнятними рішеннями, якщо не потрібна масштабованість або висока пропускна здатність.
+However, the Reactor pattern has limitations, the main one being the use of callbacks, which can complicate program analysis and debugging—a common issue in inversion-of-control designs. Simpler approaches, such as "thread-per-connection" or fully iterative designs, may be acceptable if scalability or high throughput is not required.
 
-Однопоточність може стати недоліком у випадках, що потребують максимальної пропускної здатності або коли запити потребують значної обробки. Подолати ці обмеження можуть різні багатопотокові конструкції. І фактично деякі з них досі використовують шаблон реактора як підкомпонент для обробки подій і введення-виведення. 
+Single-threading can become a drawback in cases requiring maximum throughput or when requests require significant processing. Various multithreading constructs can overcome these limitations, and some of them still use the Reactor pattern as a subcomponent for event handling and I/O.
 
-### Статична модель (діаграма класів або модулів) Reactor
+### Static Model (Class or Module Diagram) of Reactor
 
 ![Статична модель Reactor](https://github.com/NorthDice/RGR_APPZ_Balychev/blob/main/ReactorClassDiagram.jpg)
 
-### Динамічна модель (діаграма взаємодії або стану) Reactor
+### Dynamic Model (Interaction or State Diagram) of Reactor
 
 ![Динамічна модель Reactor](https://github.com/NorthDice/RGR_APPZ_Balychev/blob/main/ReactorSequanceDiagram.jpg)
 
